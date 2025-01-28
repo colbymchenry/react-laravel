@@ -1,15 +1,33 @@
 import { useAuth } from '@/contexts/AuthContext';
+import { Page, Layout, Button, Text } from '@shopify/polaris';
 
 export default function Dashboard() {
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    
     return (
-        <div className="min-h-screen p-6">
-            <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
-                <div className="bg-white rounded-lg shadow p-6">
-                    <p className="text-lg">Welcome, {user?.email}</p>
-                </div>
-            </div>
-        </div>
+        <Page>
+            <Layout>
+                <Layout.Section>
+                    <Text variant="heading2xl" as="h1">
+                        Dashboard
+                    </Text>
+                    
+                    <div className="mt-4">
+                        <Text variant="bodyLg" as="p">
+                            Welcome, {user?.email}
+                        </Text>
+                        
+                        <div className="mt-6">
+                            <Button 
+                                onClick={logout}
+                                tone="critical"
+                            >
+                                Logout
+                            </Button>
+                        </div>
+                    </div>
+                </Layout.Section>
+            </Layout>
+        </Page>
     );
 } 

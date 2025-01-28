@@ -1,16 +1,19 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
+import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '@/services/firebase';
 import axios from 'axios';
+import { router } from '@inertiajs/react';
 
 interface AuthContextType {
     user: User | null;
     loading: boolean;
+    logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
+    logout: () => {},
 });
 
 interface Props {
@@ -48,8 +51,23 @@ export function AuthProvider({ children, initialAuth }: Props) {
         return () => unsubscribe();
     }, [initialAuth]);
 
+    async function logout() {
+        try {
+            // First sign out from Firebase
+            await signOut(auth);
+            // Then make a POST request to server to clear the session
+            router.post('/logout', {}, {
+                onSuccess: () => {
+                    router.visit('/login');
+                },
+            });
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, loading }}>
+        <AuthContext.Provider value={{ user, loading, logout }}>
             {!loading && children}
         </AuthContext.Provider>
     );
