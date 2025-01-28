@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { auth } from '@/services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { router } from '@inertiajs/react';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ export default function Login() {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            router.visit('/dashboard');
         } catch (error) {
             console.error('Login error:', error);
         }
