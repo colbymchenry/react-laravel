@@ -42,3 +42,9 @@ Client
 ```
 npm run dev
 ```
+
+## Deploying to Vercel
+Make sure to update SESSION_DRIVER to mongodb in the .env file.
+```
+SESSION_DRIVER=mongodb
+```
