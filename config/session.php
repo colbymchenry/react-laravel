@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'cookie'),
+    'driver' => env('SESSION_DRIVER', 'mongodb'),
 
     /*
     |--------------------------------------------------------------------------
@@ -213,5 +213,12 @@ return [
     */
 
     'partitioned' => env('SESSION_PARTITIONED_COOKIE', false),
+
+    // Add MongoDB specific configuration
+    'mongodb' => [
+        'connection' => env('MONGODB_URI'),
+        'database' => env('MONGODB_DATABASE'),
+        'collection' => 'sessions',
+    ],
 
 ];
