@@ -12,16 +12,12 @@ use App\Http\Middleware\ShareAuthData;
 // Public routes with redirect for authenticated users
 Route::middleware([RedirectAuthenticatedUsers::class])->group(function () {
     Route::get('/', function () {
-        return inertia('Login');
+        return redirect()->route('login');
     });
 
     Route::get('/login', function (Request $request) {
         return inertia('Login');
     })->name('login');
-
-    Route::get('/register', function () {
-        return inertia('Register');
-    })->name('register');
 });
 
 // Protected routes

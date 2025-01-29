@@ -24,6 +24,7 @@ class RedirectAuthenticatedUsers
                 return redirect()->route('dashboard');
             } catch (\Exception $e) {
                 // Invalid token, continue to next middleware
+                return redirect()->route('login');
             }
         }
 
