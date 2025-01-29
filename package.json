@@ -20,7 +20,13 @@
     },
     "dependencies": {
         "@inertiajs/react": "^2.0.3",
+        "@shopify/polaris": "^13.9.2",
+        "@shopify/polaris-icons": "^9.3.0",
+        "firebase": "^11.2.0",
+        "formik": "^2.4.6",
         "react": "^16.8 || ^17.0 || ^18.0 || ^19.0",
-        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0"
+        "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0",
+        "yup": "^1.6.1",
+        "zustand": "^5.0.3"
     }
 }
