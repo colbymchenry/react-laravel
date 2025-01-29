@@ -1,4 +1,4 @@
-# Laravel 11.31 + InertiaJS 2.0 + React 19.0.0 + TailwindCSS 3.4.13 + TypeScript 5.7.3
+# Laravel 11.31 + InertiaJS 2.0 + React 19.0.0 + TailwindCSS 3.4.13 + TypeScript 5.7.3 + Firebase
 
 # Getting Started
 
