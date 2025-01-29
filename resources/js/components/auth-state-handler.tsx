@@ -1,17 +1,17 @@
 import { useEffect } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/services/firebase'
-import { useAuthStore } from '@/stores/useAuthStore'
 import axios from 'axios'
-import { useLaravelProps } from '@/stores/useLaravelProps'
 import { LayoutManager } from '@/layouts/manager'
+import { useAuth } from '@/stores/auth'
+import { useLaravelProps } from '@/stores/laravel-props'
 
 interface Props {
     children: React.ReactNode
 }
 
 export function AuthStateHandler({ children }: Props) {
-    const { setUser, setLoading, initialize, loading } = useAuthStore()
+    const { setUser, setLoading, initialize, loading } = useAuth()
     const laravelData = useLaravelProps()
 
     useEffect(() => {

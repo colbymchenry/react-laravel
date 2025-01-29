@@ -17,17 +17,42 @@ class StoreController extends Controller
         ]);
 
         try {
-            // Verify token with Shopify
-            $response = Http::withHeaders([
-                'X-Shopify-Access-Token' => $request->token
-            ])->get("https://{$request->storeUrl}.myshopify.com/admin/api/2024-01/shop.json");
+            $baseUrl = "https://{$request->storeUrl}.myshopify.com/admin/api/2024-01";
+            $headers = ['X-Shopify-Access-Token' => $request->token];
+            $accessChecks = [];
 
-            if (!$response->successful()) {
+            // Check shop access (basic info)
+            $shopResponse = Http::withHeaders($headers)->get("$baseUrl/shop.json");
+            if (!$shopResponse->successful()) {
                 return response()->json(['error' => 'Invalid token'], 400);
             }
-
-            $shopData = $response->json()['shop'];
+            $shopData = $shopResponse->json()['shop'];
             
+            // Check orders access
+            $ordersResponse = Http::withHeaders($headers)->get("$baseUrl/orders.json?limit=1");
+            $accessChecks['orders'] = $ordersResponse->successful();
+
+            // Check customers access
+            $customersResponse = Http::withHeaders($headers)->get("$baseUrl/customers.json?limit=1");
+            $accessChecks['customers'] = $customersResponse->successful();
+
+            // Check products access
+            $productsResponse = Http::withHeaders($headers)->get("$baseUrl/products.json?limit=1");
+            $accessChecks['products'] = $productsResponse->successful();
+
+            // Check blogs access
+            $blogsResponse = Http::withHeaders($headers)->get("$baseUrl/blogs.json?limit=1");
+            $accessChecks['blogs'] = $blogsResponse->successful();
+
+            // Check articles access (using first blog if available)
+            if ($blogsResponse->successful() && !empty($blogsResponse->json()['blogs'])) {
+                $firstBlogId = $blogsResponse->json()['blogs'][0]['id'];
+                $articlesResponse = Http::withHeaders($headers)->get("$baseUrl/blogs/{$firstBlogId}/articles.json?limit=1");
+                $accessChecks['articles'] = $articlesResponse->successful();
+            } else {
+                $accessChecks['articles'] = false;
+            }
+
             // Get user_uid from session
             $userUid = Session::get('firebase_user.uid');
             
@@ -45,7 +70,10 @@ class StoreController extends Controller
                 ]
             );
 
-            return response()->json(['store' => $store]);
+            return response()->json([
+                'store' => $store,
+                'permissions' => $accessChecks
+            ]);
 
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to verify token'], 500);

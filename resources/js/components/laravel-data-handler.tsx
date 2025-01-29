@@ -1,4 +1,4 @@
-import { useLaravelProps } from '@/stores/useLaravelProps'
+import { useLaravelProps } from '@/stores/laravel-props'
 import { useEffect } from 'react'
 
 export function LaravelDataHandler(props: any) {
