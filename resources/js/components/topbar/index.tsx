@@ -1,6 +1,6 @@
 "use client"
 
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuthStore } from "@/stores/useAuthStore";
 import {
   TopBar,
 } from "@shopify/polaris";
@@ -10,7 +10,7 @@ import { useState, useCallback } from "react";
 export function AppTopbar() {
   const [searchValue, setSearchValue] = useState("");
   const [userMenuActive, setUserMenuActive] = useState(false);
-  const { logout } = useAuth()
+  const { logout } = useAuthStore()
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchValue(value);

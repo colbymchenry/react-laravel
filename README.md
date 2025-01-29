@@ -49,6 +49,7 @@ Make sure to update SESSION_DRIVER to mongodb in the .env file.
 SESSION_DRIVER=mongodb
 ```
 
+
 ## Firebase Domain Configuration
 
 When using Firebase Authentication with email links, you need to configure authorized domains in Firebase. This allows specific domains to complete the sign-in process.
@@ -78,3 +79,9 @@ For a typical setup, you'll want to whitelist:
 - No code changes are needed - this is purely a Firebase Console configuration
 - The authentication error occurs when domains aren't properly whitelisted
 - Make sure to add all domains for each environment (development, staging, production)
+
+# Generating Types for Models
+To generate types for models, run the following command:
+```
+php artisan generate:types
+```

@@ -5,8 +5,8 @@ import { Frame } from "@shopify/polaris";
 export function AuthLayout({ children }: { children: React.ReactNode }) {
     const logo = {
         topBarSource:
-            'https://cdn.shopify.com/s/files/1/2376/3301/files/Shopify_Secondary_Inverted.png',
-        width: 86,
+            '/assets/nav-logo.png',
+        width: 36,
         url: '#',
         accessibilityLabel: 'Shopify',
     };

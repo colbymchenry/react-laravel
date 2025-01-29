@@ -17,7 +17,7 @@ export const auth = getAuth(app);
 export async function sendMagicLink(email: string) {
     window.localStorage.setItem('emailForSignIn', email);
     const actionCodeUrl = await sendSignInLinkToEmail(auth, email, {
-        url: `${import.meta.env.VITE_APP_URL}/auth/email-link`,
+        url: `${window.location.origin}/auth/email-link`,
         handleCodeInApp: true,
     });
     return actionCodeUrl;

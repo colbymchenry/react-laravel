@@ -9,7 +9,8 @@ export function AppSidebar() {
                     {
                         label: 'Home',
                         icon: HomeIcon,
-                        url: '/',
+                        url: '/dashboard',
+                        selected: window.location.pathname === '/dashboard',
                     },
                 ]}
             />

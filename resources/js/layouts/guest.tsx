@@ -6,12 +6,11 @@ const GUEST_ROUTES = ['/login', '/auth/email-link']
 export function GuestLayout({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         // Immediately redirect to login page if not a guest route
-        if (!GUEST_ROUTES.includes(router.page.url)) {
+        if (!GUEST_ROUTES.includes(window.location.pathname)) {
             router.visit("/login");
             return;
         }
-    }, [router.page.url]) // Use router.page.url as dependency
+    }, []) // Remove dependency since we're using window.location
 
-    // Remove console.log
-    return !GUEST_ROUTES.includes(router.page.url) ? null : children;
+    return !GUEST_ROUTES.includes(window.location.pathname) ? null : children;
 }
