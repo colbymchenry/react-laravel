@@ -2,7 +2,6 @@ import { Card, Text, Button, TextField, List, FormLayout, Form, Box, Link } from
 import { useState } from "react"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { router } from '@inertiajs/react';
 import axios from 'axios';
 
 export default function ShopifyConnectCard() {
@@ -20,7 +19,7 @@ export default function ShopifyConnectCard() {
             shopifyStoreUrl: ''
         },
         validationSchema,
-        onSubmit: (values) => {
+        onSubmit: () => {
             setConfirmed(true);
         }
     });
@@ -125,7 +124,7 @@ function Step1({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
     )
 }
 
-function Step2({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
+function Step2() {
     return (
         <Text as="p" variant="bodyLg" alignment="center">
             Next click <Button variant="primary">Create an app</Button> on the same page and name it whatever you want.
@@ -133,7 +132,7 @@ function Step2({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
     )
 }
 
-function Step3({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
+function Step3() {
     return (
         <Text as="p" variant="bodyLg" alignment="center">
             Next click <Button>Configure Admin API scopes</Button> on the same page.
@@ -141,7 +140,7 @@ function Step3({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
     )
 }
 
-function Step4({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
+function Step4() {
     return (
         <div className="text-center">
             <Text as="p" variant="bodyLg">Add the following scopes:</Text>
@@ -157,7 +156,7 @@ function Step4({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
     )
 }
 
-function Step5({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
+function Step5() {
     return (
         <Text as="p" variant="bodyLg" alignment="center">
             Go to the <strong>API credentials</strong> tab on the same page and click <Button variant="primary">Install app</Button>

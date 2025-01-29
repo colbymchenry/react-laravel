@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loginWithEmailLink } from '@/services/firebase';
-import { router } from '@inertiajs/react';
 import { Page, Spinner, Banner } from '@shopify/polaris';
+import axios from 'axios';
 
 export default function EmailLinkHandler() {
     const [error, setError] = useState<string | null>(null);
@@ -19,10 +19,12 @@ export default function EmailLinkHandler() {
                 if (userCredential) {
                     const token = await userCredential.user.getIdToken();
                     // Send token to server to create session
-                    await router.post('/auth/callback', { token });
+                    await axios.post('/auth/callback', { token });
+                    window.location.href = '/dashboard';
                 }
             } catch (error) {
                 console.error('Email link sign in error:', error);
+                window.location.href = '/login';
                 setError('Failed to verify email link');
             }
         };

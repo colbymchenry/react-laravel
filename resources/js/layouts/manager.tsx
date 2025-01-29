@@ -1,10 +1,10 @@
 import { GuestLayout } from "./guest";
 import { AuthLayout } from "./authenticated";
-import { useAuthStore } from "@/stores/useAuthStore";
-import { useLaravelProps } from "@/stores/useLaravelProps";
+import { useLaravelProps } from "@/stores/laravel-props";
+import { useAuth } from "@/stores/auth";
 
 export function LayoutManager({ children }: { children: React.ReactNode }) {
-    const { user } = useAuthStore()
+    const { user } = useAuth()
     const { auth } = useLaravelProps()
 
     // Immediately render guest layout for non-authenticated users

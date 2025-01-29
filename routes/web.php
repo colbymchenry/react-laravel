@@ -51,7 +51,7 @@ Route::post('/auth/callback', function (Request $request) {
         ]);
         Session::put('firebase_token', $token);
         
-        return redirect()->route('dashboard');
+        return response()->json(['message' => 'Token refreshed']);
     } catch (\Exception $e) {
         return redirect()->route('login')->with('error', 'Invalid token');
     }

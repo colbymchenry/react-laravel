@@ -1,10 +1,10 @@
 import ShopifyConnectCard from '@/components/shopify-connect-card'
-import { useAuthStore } from '@/stores/useAuthStore'
-import { useLaravelProps } from '@/stores/useLaravelProps'
+import { useAuth } from '@/stores/auth'
+import { useLaravelProps } from '@/stores/laravel-props'
 import { Page, Layout, Button, Text } from '@shopify/polaris'
 
 export default function Dashboard() {
-    const { user, logout } = useAuthStore()
+    const { user, logout } = useAuth()
     const { stores } = useLaravelProps()
     return (
         <Page>
