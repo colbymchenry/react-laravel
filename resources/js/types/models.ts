@@ -12,3 +12,15 @@ export interface Store {
     created_at: string;
     updated_at: string;
 }
+
+export interface SyncData {
+    store_id: string;
+    type: string;
+    shopify_id: string;
+    synced_at: string;
+    sync_status: string;
+    sync_error: string;
+    _id: string;
+    created_at: string;
+    updated_at: string;
+}

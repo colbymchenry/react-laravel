@@ -1,5 +1,5 @@
 import { Navigation } from "@shopify/polaris";
-import { HomeIcon } from "@shopify/polaris-icons";
+import { HomeIcon, StoreIcon } from "@shopify/polaris-icons";
 
 export function AppSidebar() {
     return (
@@ -11,6 +11,12 @@ export function AppSidebar() {
                         icon: HomeIcon,
                         url: '/dashboard',
                         selected: window.location.pathname === '/dashboard',
+                    },
+                    {
+                        label: 'Stores',
+                        icon: StoreIcon,
+                        url: '/dashboard/stores',
+                        selected: window.location.pathname === '/dashboard/stores',
                     },
                 ]}
             />

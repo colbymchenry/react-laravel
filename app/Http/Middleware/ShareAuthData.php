@@ -20,7 +20,7 @@ class ShareAuthData
                     'user' => $user,
                     'token' => Session::get('firebase_token')
                 ],
-                'stores' => Store::where('user_uid', $user['uid'])->get()
+                'stores' => Store::where('user_uid', $user['uid'])->get()->makeHidden('access_token')->makeHidden('user_uid')
             ]);
         }
 

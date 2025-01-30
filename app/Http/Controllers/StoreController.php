@@ -79,4 +79,25 @@ class StoreController extends Controller
             return response()->json(['error' => 'Failed to verify token'], 500);
         }
     }
+
+    public function disconnect(Request $request, $domain)
+    {
+        try {
+            $store = Store::where('domain', $domain)->first();
+            
+            if (!$store) {
+                return response()->json(['error' => 'Store not found'], 404);
+            }
+
+            // Check if user owns the store
+            if ($store->user_uid !== Session::get('firebase_user.uid')) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
+
+            $store->delete();
+            return response()->json(['message' => 'Store disconnected successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to disconnect store'], 500);
+        }
+    }
 } 

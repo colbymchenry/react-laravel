@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use App\Http\Controllers\StoreController;
 use App\Http\Middleware\ShareAuthData;
+use App\Http\Controllers\SyncDataController;
+use App\Models\SyncData;
+use Inertia\Inertia;
 
 // Public routes with redirect for authenticated users
 Route::middleware([RedirectAuthenticatedUsers::class])->group(function () {
@@ -23,10 +26,18 @@ Route::middleware([RedirectAuthenticatedUsers::class])->group(function () {
 // Protected routes
 Route::middleware(['web', VerifyFirebaseToken::class, ShareAuthData::class])->group(function () {
     Route::get('/dashboard', function () {
-        return inertia('Dashboard');
+        return Inertia::render('dashboard/Dashboard', [
+            'sync_data' => Inertia::defer(fn () => SyncData::all()),
+        ]);
     })->name('dashboard');
 
+    Route::get('/dashboard/stores', function () {
+        return inertia('dashboard/Stores');
+    })->name('dashboard.stores');
+
+    Route::get('/api/stores/sync-data', [SyncDataController::class, 'getStoreSyncData']);
     Route::post('/api/verify-store-token', [StoreController::class, 'verifyToken']);
+    Route::delete('/api/stores/{domain}', [StoreController::class, 'disconnect']);
 });
 
 // Add this with your other routes

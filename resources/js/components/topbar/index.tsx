@@ -1,7 +1,9 @@
 "use client"
 
 import { useAuth } from "@/stores/auth";
+import { useDialog } from "@/stores/dialog";
 import {
+  Text,
   TopBar,
 } from "@shopify/polaris";
 import { ReturnIcon } from "@shopify/polaris-icons";
@@ -11,6 +13,7 @@ export function AppTopbar() {
   const [searchValue, setSearchValue] = useState("");
   const [userMenuActive, setUserMenuActive] = useState(false);
   const { logout } = useAuth()
+  const { addDialog } = useDialog()
 
   const handleSearchChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -27,7 +30,20 @@ export function AppTopbar() {
           content: "Sign out",
           icon: ReturnIcon,
           onAction: () => {
-            logout()
+            addDialog({
+              title: 'Logout',
+              children: <Text as="p">Are you sure you want to logout?</Text>,
+              primaryAction: {
+                content: 'Yes, log me out',
+                onAction: logout,
+                destructive: true,
+              },
+              secondaryActions: [
+                {
+                  content: 'Nevermind',
+                }
+              ]
+            })
           },
         },
       ],

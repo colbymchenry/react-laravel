@@ -7,11 +7,12 @@ import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import { AuthStateHandler } from './components/auth-state-handler'
 import { LaravelDataHandler } from './components/laravel-data-handler';
+import { DialogHandler } from './components/dialog-handler';
 
 createInertiaApp({
   resolve: (name: string) => {
-    const pages = import.meta.glob('./pages/**/*.tsx', { eager: true })
-    return pages[`./pages/${name}.tsx`]
+    const pages = import.meta.glob('./Pages/**/*.tsx', { eager: true })
+    return pages[`./Pages/${name}.tsx`]
   },
   setup({ el, App, props }: { el: HTMLElement, App: React.ComponentType, props: any }) {
     createRoot(el).render(
@@ -19,6 +20,7 @@ createInertiaApp({
         <LaravelDataHandler {...props}>
           <AuthStateHandler {...props}>
             <App {...props} />
+            <DialogHandler />
           </AuthStateHandler>
         </LaravelDataHandler>
       </AppProvider>

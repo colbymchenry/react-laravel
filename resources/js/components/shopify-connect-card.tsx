@@ -25,7 +25,7 @@ export default function ShopifyConnectCard() {
     });
 
     return (
-        <div className="w-full max-w-md mx-auto">
+        <div className="flex">
             <Card>
                 <Box paddingBlockEnd="200">
                     <div className="text-center">
