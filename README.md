@@ -83,5 +83,5 @@ For a typical setup, you'll want to whitelist:
 # Generating Types for Models
 To generate types for models, run the following command:
 ```
-php artisan generate:types
+npm run gen:types
 ```
