@@ -9,17 +9,13 @@ interface LaravelProps {
         } | null
         token?: string
     }
-    setAuth: (auth: any) => void
     stores: Store[]
-    setStores: (stores: Store[]) => void
     handleProps: (props: any) => void
 }
 
 export const useLaravelProps = create<LaravelProps>((set) => ({
     auth: undefined,
-    setAuth: (auth: any) => set({ auth }),
     stores: [],
-    setStores: (stores: Store[]) => set({ stores }),
     handleProps: (props: any) => {
         set(props.initialPage.props)
     }
