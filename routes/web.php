@@ -13,6 +13,7 @@ use App\Models\SyncData;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Http\Middleware\AdminMiddleware;
+use App\Models\RemoteConfig;
 // Public routes with redirect for authenticated users
 Route::middleware([RedirectAuthenticatedUsers::class])->group(function () {
     Route::get('/', function () {
@@ -42,8 +43,24 @@ Route::middleware(['web', VerifyFirebaseToken::class, ShareAuthData::class])->gr
 
     Route::middleware([AdminMiddleware::class])->group(function () {
         Route::get('/dashboard/admin', function () {
-            return Inertia::render('dashboard/admin/Admin');
+            return Inertia::render('dashboard/admin/Admin', [
+                'remoteConfig' => Inertia::defer(fn () => RemoteConfig::first()),
+            ]);
         })->name('dashboard.admin');
+
+        Route::post('/api/update-remote-config', function (Request $request) {
+            $validated = $request->validate([
+                'openai_api_key' => 'required|string',
+                'openai_embedding_model' => 'required|string',
+                'openai_model' => 'required|string'
+            ]);
+
+            $config = RemoteConfig::first() ?? new RemoteConfig();
+            $config->fill($validated);
+            $config->save();
+
+            return back()->with('success', 'Config updated successfully');
+        });
     });
     
     

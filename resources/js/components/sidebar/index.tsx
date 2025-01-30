@@ -1,4 +1,4 @@
-import { usePageData } from "@/stores/page-data";
+import { usePage } from "@inertiajs/react";
 import { Icon, Navigation } from "@shopify/polaris";
 import { HomeIcon, StoreIcon } from "@shopify/polaris-icons";
 import {
@@ -6,7 +6,7 @@ import {
 } from '@shopify/polaris-icons';
 
 export function AppSidebar() {
-    const { userData } = usePageData()
+    const { userData } = usePage().props
 
     let routes = [
         {
@@ -22,8 +22,6 @@ export function AppSidebar() {
             selected: window.location.pathname === '/dashboard/stores',
         },
     ]
-
-    console.log(userData)
 
     if (userData?.admin) {
         routes.push({

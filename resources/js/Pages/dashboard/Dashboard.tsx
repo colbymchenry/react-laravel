@@ -1,12 +1,13 @@
-import { usePageData } from '@/stores/page-data'
+import { Store } from '@/types/models'
+import { usePage } from '@inertiajs/react'
 import { Deferred } from '@inertiajs/react'
 import { Page, Layout, Text, Card, Grid, BlockStack, InlineStack, Badge, SkeletonDisplayText, SkeletonBodyText, Button, Icon } from '@shopify/polaris'
 import { RefreshIcon } from '@shopify/polaris-icons'
 
 export default function Dashboard() {
-    const { stores = [] } = usePageData()
+    const { stores = [] as Store[] } = usePage().props
 
-    const cards = stores.map((store) => {
+    const cards: any[] = stores.map((store: Store) => {
         return {
             ...store,
             products: 180,

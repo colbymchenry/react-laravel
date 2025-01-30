@@ -1,13 +1,14 @@
 import { Page, Layout, Card, Text, Button, DataTable, ButtonGroup } from '@shopify/polaris';
-import { usePageData } from '@/stores/page-data';
 import { useDialog } from '@/stores/dialog';
 import axios from 'axios';
 import ShopifyConnectCard from '@/components/shopify-connect-card';
 import { useState } from 'react';
 import { ConnectStoreModal } from '@/components/modals/connect-store';
+import { Store } from '@/types/models';
+import { usePage } from '@inertiajs/react';
 
 export default function Stores() {
-    const { stores } = usePageData();
+    const { stores = [] as Store[] } = usePage().props;
     const { addDialog } = useDialog();
     const [isConnectStoreModalOpen, setIsConnectStoreModalOpen] = useState(false);
 
@@ -51,7 +52,7 @@ export default function Stores() {
         );
     }
 
-    const rows = stores.map(store => [
+    const rows = stores.map((store: Store) => [
         <Text variant="bodyMd" as="span" fontWeight="bold">{store.name}</Text>,
         <Text variant="bodyMd" as="span">{store.domain}</Text>,
         <Text variant="bodyMd" as="span">{store.shop_owner}</Text>,
