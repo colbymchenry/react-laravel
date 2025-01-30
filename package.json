@@ -3,7 +3,8 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "gen:types": "php artisan generate:types"
     },
     "devDependencies": {
         "@types/react": "^19.0.8",
