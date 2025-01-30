@@ -23,8 +23,9 @@ class RedirectAuthenticatedUsers
                 // Redirect to dashboard if trying to access auth pages
                 return redirect()->route('dashboard');
             } catch (\Exception $e) {
-                // Invalid token, continue to next middleware
-                return redirect()->route('login');
+                // If token is invalid, clear the session
+                Session::forget('firebase_token');
+                Session::forget('firebase_user');
             }
         }
 
