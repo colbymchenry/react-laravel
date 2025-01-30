@@ -4,8 +4,10 @@ import axios from 'axios'
 import { LayoutManager } from '@/layouts/manager'
 import { useAuth } from '@/stores/auth'
 import { auth } from '@/services/firebase'
+import { useLaravelProps } from '@/stores/laravel-props'
 
 export function AuthStateHandler(props: any) {
+    useLaravelProps.getState().handleProps(props)
     const { setUser, setLoading, initialize, loading } = useAuth()
 
     useEffect(() => {

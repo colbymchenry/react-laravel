@@ -6,7 +6,6 @@ import enTranslations from '@shopify/polaris/locales/en.json';
 import { createInertiaApp } from '@inertiajs/react'
 import { createRoot } from 'react-dom/client'
 import { AuthStateHandler } from './components/auth-state-handler'
-import { LaravelDataHandler } from './components/laravel-data-handler';
 import { DialogHandler } from './components/dialog-handler';
 
 createInertiaApp({
@@ -17,12 +16,10 @@ createInertiaApp({
   setup({ el, App, props }: { el: HTMLElement, App: React.ComponentType, props: any }) {
     createRoot(el).render(
       <AppProvider i18n={enTranslations}>
-        <LaravelDataHandler {...props}>
-          <AuthStateHandler {...props}>
-            <App {...props} />
-            <DialogHandler />
-          </AuthStateHandler>
-        </LaravelDataHandler>
+        <AuthStateHandler {...props}>
+          <App {...props} />
+          <DialogHandler />
+        </AuthStateHandler>
       </AppProvider>
     )
   },
