@@ -11,7 +11,8 @@ use App\Http\Middleware\ShareAuthData;
 use App\Http\Controllers\SyncDataController;
 use App\Models\SyncData;
 use Inertia\Inertia;
-
+use App\Models\User;
+use App\Http\Middleware\AdminMiddleware;
 // Public routes with redirect for authenticated users
 Route::middleware([RedirectAuthenticatedUsers::class])->group(function () {
     Route::get('/', function () {
@@ -38,12 +39,23 @@ Route::middleware(['web', VerifyFirebaseToken::class, ShareAuthData::class])->gr
     Route::get('/api/stores/sync-data', [SyncDataController::class, 'getStoreSyncData']);
     Route::post('/api/verify-store-token', [StoreController::class, 'verifyToken']);
     Route::delete('/api/stores/{domain}', [StoreController::class, 'disconnect']);
+
+    Route::middleware([AdminMiddleware::class])->group(function () {
+        Route::get('/dashboard/admin', function () {
+            return Inertia::render('dashboard/admin/Admin');
+        })->name('dashboard.admin');
+    });
+    
+    
 });
 
 // Add this with your other routes
 Route::post('/logout', function () {
+    // Clear all session data
     Session::flush();
-    return redirect()->route('login');
+    
+    // Return JSON response instead of redirect
+    return redirect()->name('login');
 })->name('logout');
 
 // Add this with your other public routes
@@ -61,6 +73,14 @@ Route::post('/auth/callback', function (Request $request) {
             'email' => $email
         ]);
         Session::put('firebase_token', $token);
+
+        User::updateOrCreate(
+            ['uid' => $uid], // Find by uid
+            [
+                'uid' => $uid,
+                'admin' => true
+            ]
+        );
         
         return response()->json(['message' => 'Token refreshed']);
     } catch (\Exception $e) {

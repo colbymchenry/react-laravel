@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import getFormikFieldProps from '@/utils/utils';
 
 export default function ShopifyConnectCard() {
     const [confirmed, setConfirmed] = useState<boolean>(false)
@@ -56,15 +57,10 @@ export default function ShopifyConnectCard() {
                             <FormLayout>
                                 <TextField
                                     label="Store URL"
-                                    value={formik.values.shopifyStoreUrl}
-                                    onChange={(value) => formik.setFieldValue('shopifyStoreUrl', value)}
                                     suffix=".myshopify.com"
                                     placeholder="my-store"
                                     autoComplete="off"
-                                    name="shopifyStoreUrl"
-                                    id="shopifyStoreUrl"
-                                    onBlur={formik.handleBlur}
-                                    error={formik.touched.shopifyStoreUrl && formik.errors.shopifyStoreUrl}
+                                    {...getFormikFieldProps('shopifyStoreUrl', formik)}
                                 />
                                 <Button
                                     submit
@@ -202,16 +198,10 @@ function Step6({ shopifyStoreUrl }: { shopifyStoreUrl: string }) {
 
                 <TextField
                     label="API Token"
-                    name="token"
-                    id="token"
-                    value={formik.values.token}
-                    onChange={(value) => formik.setFieldValue('token', value)}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.token && formik.errors.token}
-                    type="text"
                     placeholder="shpat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                     monospaced
                     autoComplete="off"
+                    {...getFormikFieldProps('token', formik)}
                 />
 
                 <Button

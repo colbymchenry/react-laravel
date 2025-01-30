@@ -4,10 +4,10 @@ import axios from 'axios'
 import { LayoutManager } from '@/layouts/manager'
 import { useAuth } from '@/stores/auth'
 import { auth } from '@/services/firebase'
-import { useLaravelProps } from '@/stores/laravel-props'
+import { usePageData } from '@/stores/page-data'
 
 export function AuthStateHandler(props: any) {
-    useLaravelProps.getState().handleProps(props)
+    usePageData.getState().handleProps(props)
     const { setUser, setLoading, initialize, loading } = useAuth()
 
     useEffect(() => {
@@ -19,8 +19,11 @@ export function AuthStateHandler(props: any) {
                 if (user) {
                     const token = await user.getIdToken(true)
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-                    axios.post('/auth/refresh-token', { token })
+                    await axios.post('/auth/refresh-token', { token })
                 } else {
+                    if (initialAuth?.token) {
+                        await axios.post('/logout')
+                    }
                     delete axios.defaults.headers.common['Authorization']
                 }
                 setUser(user)

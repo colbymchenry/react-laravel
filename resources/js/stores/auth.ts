@@ -2,7 +2,6 @@ import { create } from 'zustand'
 import { User, signOut } from 'firebase/auth'
 import { auth } from '@/services/firebase'
 import axios from 'axios'
-import { router } from '@inertiajs/react'
 
 interface AuthState {
     user: User | null
@@ -23,8 +22,14 @@ export const useAuth = create<AuthState>((set) => ({
     setLoading: (loading) => set({ loading }),
     logout: async () => {
         try {
+            // First clear the server session
+            await axios.post('/logout')
+            // Then sign out of Firebase
             await signOut(auth)
-            router.post('/logout')
+            // Clear any local auth headers
+            delete axios.defaults.headers.common['Authorization']
+            // Force redirect to login
+            window.location.href = '/login'
         } catch (error) {
             console.error('Logout error:', error)
         }

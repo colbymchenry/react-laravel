@@ -1,5 +1,5 @@
 import { Page, Layout, Card, Text, Button, DataTable, ButtonGroup } from '@shopify/polaris';
-import { useLaravelProps } from '@/stores/laravel-props';
+import { usePageData } from '@/stores/page-data';
 import { useDialog } from '@/stores/dialog';
 import axios from 'axios';
 import ShopifyConnectCard from '@/components/shopify-connect-card';
@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { ConnectStoreModal } from '@/components/modals/connect-store';
 
 export default function Stores() {
-    const { stores } = useLaravelProps();
+    const { stores } = usePageData();
     const { addDialog } = useDialog();
     const [isConnectStoreModalOpen, setIsConnectStoreModalOpen] = useState(false);
 

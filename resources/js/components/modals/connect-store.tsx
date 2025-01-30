@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import getFormikFieldProps from '@/utils/utils';
 
 const StoreUrlSchema = Yup.object().shape({
     shopifyStoreUrl: Yup.string()
@@ -70,15 +71,10 @@ export function ConnectStoreModal({ open, onClose }: { open: boolean, onClose: (
             <FormLayout>
                 <TextField
                     label="Store URL"
-                    value={urlFormik.values.shopifyStoreUrl}
-                    onChange={(value) => urlFormik.setFieldValue('shopifyStoreUrl', value)}
                     suffix=".myshopify.com"
                     placeholder="my-store"
                     autoComplete="off"
-                    name="shopifyStoreUrl"
-                    id="shopifyStoreUrl"
-                    onBlur={urlFormik.handleBlur}
-                    error={urlFormik.touched.shopifyStoreUrl && urlFormik.errors.shopifyStoreUrl}
+                    {...getFormikFieldProps('shopifyStoreUrl', urlFormik)}
                 />
                 <Button
                     submit
@@ -134,16 +130,10 @@ export function ConnectStoreModal({ open, onClose }: { open: boolean, onClose: (
 
                 <TextField
                     label="API Token"
-                    name="token"
-                    id="token"
-                    value={tokenFormik.values.token}
-                    onChange={(value) => tokenFormik.setFieldValue('token', value)}
-                    onBlur={tokenFormik.handleBlur}
-                    error={tokenFormik.touched.token && tokenFormik.errors.token}
-                    type="text"
                     placeholder="shpat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                     monospaced
                     autoComplete="off"
+                    {...getFormikFieldProps('token', tokenFormik)}
                 />
 
                 <div className="flex justify-center space-x-2">

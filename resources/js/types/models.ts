@@ -1,5 +1,14 @@
 // This file is auto-generated. Do not edit manually.
 
+export interface RemoteConfig {
+    openai_api_key: string;
+    openai_embedding_model: string;
+    openai_model: string;
+    _id: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface Store {
     user_uid: string;
     store_url: string;
@@ -20,6 +29,14 @@ export interface SyncData {
     synced_at: string;
     sync_status: string;
     sync_error: string;
+    _id: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface User {
+    uid: string;
+    admin: string;
     _id: string;
     created_at: string;
     updated_at: string;

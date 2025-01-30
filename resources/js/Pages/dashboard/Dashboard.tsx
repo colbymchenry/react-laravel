@@ -1,10 +1,10 @@
-import { useLaravelProps } from '@/stores/laravel-props'
+import { usePageData } from '@/stores/page-data'
 import { Deferred } from '@inertiajs/react'
 import { Page, Layout, Text, Card, Grid, BlockStack, InlineStack, Badge, SkeletonDisplayText, SkeletonBodyText, Button, Icon } from '@shopify/polaris'
 import { RefreshIcon } from '@shopify/polaris-icons'
 
 export default function Dashboard() {
-    const { stores = [] } = useLaravelProps()
+    const { stores = [] } = usePageData()
 
     const cards = stores.map((store) => {
         return {

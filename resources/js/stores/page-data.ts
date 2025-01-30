@@ -1,7 +1,7 @@
-import { Store } from '@/types/models'
+import { Store, User as UserData } from '@/types/models'
 import { create } from 'zustand'
 
-interface LaravelProps {
+interface PageData {
     auth?: {
         user: {
             uid: string
@@ -10,12 +10,14 @@ interface LaravelProps {
         token?: string
     }
     stores: Store[]
+    userData?: UserData
     handleProps: (props: any) => void
 }
 
-export const useLaravelProps = create<LaravelProps>((set) => ({
+export const usePageData = create<PageData>((set) => ({
     auth: undefined,
     stores: [],
+    userData: undefined,
     handleProps: (props: any) => {
         set(props.initialPage.props)
     }
