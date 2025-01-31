@@ -15,7 +15,8 @@ class VerifyFirebaseToken
         $token = $request->bearerToken() ?? Session::get('firebase_token');
 
         if (!$token) {
-            Session::forget(['firebase_user', 'firebase_token']);
+            Session::flush();
+            Session::regenerate(true); // Force session regeneration
             return redirect()->route('login');
         }
 
@@ -35,7 +36,8 @@ class VerifyFirebaseToken
             
             return $next($request);
         } catch (\Exception $e) {
-            Session::forget(['firebase_user', 'firebase_token']);
+            Session::flush();
+            Session::regenerate(true); // Force session regeneration
             return redirect()->route('login');
         }
     }

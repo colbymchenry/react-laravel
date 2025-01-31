@@ -20,21 +20,13 @@ class AdminMiddleware
         $token = $request->bearerToken() ?? Session::get('firebase_token');
 
         if ($token) {
-            try {
-                $auth = Firebase::auth();
-                $auth->verifyIdToken($token);
-                $sessionUser = Session::get('firebase_user');
-                $user = User::where('uid', $sessionUser['uid'])->first()->makeHidden('uid');
-                
-                // If we get here, token is valid and user is authenticated
-                // Only redirect if on an auth route
-                if (in_array($request->path(), $this->authRoutes) && !$user->admin) {
-                    return redirect()->route('dashboard');
-                }
-            } catch (\Exception $e) {
-               // If token is invalid, clear the session
-               Session::forget('firebase_token');
-               Session::forget('firebase_user');
+            $auth = Firebase::auth();
+            $sessionUser = Session::get('firebase_user');
+            $user = User::where('uid', $sessionUser['uid'])->first()->makeHidden('uid');
+            
+            // redirect to dashboard if user is not admin and on admin route
+            if (in_array($request->path(), $this->authRoutes) && !$user->admin) {
+                return redirect()->route('dashboard');
             }
         } else {
             \Log::info('No token found');

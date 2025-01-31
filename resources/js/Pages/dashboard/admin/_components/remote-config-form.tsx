@@ -1,12 +1,15 @@
 import getFormikFieldProps from '@/utils/utils';
 import { usePage, Deferred, } from '@inertiajs/react';
-import { Form, FormLayout, TextField, Select, Button, SkeletonDisplayText, SkeletonBodyText } from '@shopify/polaris';
+import { Form, FormLayout, TextField, Select, Button, SkeletonDisplayText, SkeletonBodyText, Banner } from '@shopify/polaris';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useState } from 'react';
 
 const validationSchema = Yup.object().shape({
-    openai_api_key: Yup.string().required('OpenAI API Key is required'),
+    openai_api_key: Yup.string()
+        .required('OpenAI API Key is required')
+        .matches(/^sk-[A-Za-z0-9_-]+$/, 'Invalid OpenAI API key format. Should start with sk- followed by alphanumeric characters'),
     openai_embedding_model: Yup.string().required('OpenAI Embedding Model is required'),
     openai_model: Yup.string().required('OpenAI Model is required')
 });
@@ -52,8 +55,8 @@ export function RemoteConfigForm() {
 
 function ConfigFormContent() {
     const { remoteConfig } = usePage().props
-
-    console.log(remoteConfig)
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const formik = useFormik({
         initialValues: {
@@ -64,9 +67,14 @@ function ConfigFormContent() {
         validationSchema,
         onSubmit: async (values) => {
             try {
-                await axios.post('/api/update-remote-config', values)
-            } catch (error) {
+                setError(null);
+                await axios.post('/api/update-remote-config', values);
+                setShowSuccess(true);
+                // Hide success message after 3 seconds
+                setTimeout(() => setShowSuccess(false), 3000);
+            } catch (error: any) {
                 console.error('Failed to update config:', error);
+                setError(error?.response?.data?.message || 'Failed to update configuration');
             }
         }
     });
@@ -74,6 +82,26 @@ function ConfigFormContent() {
     return (
         <Form onSubmit={formik.handleSubmit}>
             <FormLayout>
+                {showSuccess && (
+                    <Banner
+                        title="Success"
+                        tone="success"
+                        onDismiss={() => setShowSuccess(false)}
+                    >
+                        <p>Configuration updated successfully.</p>
+                    </Banner>
+                )}
+
+                {error && (
+                    <Banner
+                        title="Error"
+                        tone="critical"
+                        onDismiss={() => setError(null)}
+                    >
+                        <p>{error}</p>
+                    </Banner>
+                )}
+
                 <TextField
                     label="OpenAI API Key"
                     placeholder="sk-..."
@@ -102,7 +130,14 @@ function ConfigFormContent() {
                     {...getFormikFieldProps('openai_embedding_model', formik)}
                 />
 
-                <Button submit loading={formik.isSubmitting}>Save Changes</Button>
+                <Button
+                    submit
+                    loading={formik.isSubmitting}
+                    disabled={!formik.dirty || formik.isSubmitting}
+                    variant="primary"
+                >
+                    Save Changes
+                </Button>
             </FormLayout>
         </Form>
     );

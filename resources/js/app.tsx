@@ -16,6 +16,7 @@ createInertiaApp({
       default: (props: any) => (
         <LayoutManager {...props}>
           {page.default(props)}
+          <DialogHandler />
         </LayoutManager>
       ),
     }
@@ -24,7 +25,6 @@ createInertiaApp({
     createRoot(el).render(
       <AppProvider i18n={enTranslations}>
         <App {...props} />
-        <DialogHandler />
       </AppProvider>
     )
   },

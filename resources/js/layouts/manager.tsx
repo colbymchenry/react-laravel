@@ -18,6 +18,7 @@ export function LayoutManager(props: any) {
             initialize(initialAuth)
 
             const unsubscribe = onAuthStateChanged(auth, async (user) => {
+                console.log('user', user)
                 if (user) {
                     const token = await user.getIdToken(true)
                     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -33,6 +34,8 @@ export function LayoutManager(props: any) {
             })
 
             return () => unsubscribe()
+        } else {
+            setLoading(false)
         }
     }, [initialAuth])
 

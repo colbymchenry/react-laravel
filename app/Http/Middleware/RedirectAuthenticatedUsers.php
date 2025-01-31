@@ -20,19 +20,9 @@ class RedirectAuthenticatedUsers
         $token = $request->bearerToken() ?? Session::get('firebase_token');
 
         if ($token) {
-            try {
-                $auth = Firebase::auth();
-                $auth->verifyIdToken($token);
-                
-                // If we get here, token is valid and user is authenticated
-                // Only redirect if on an auth route
-                if (in_array($request->path(), $this->guestRoutes)) {
-                    return redirect()->route('dashboard');
-                }
-            } catch (\Exception $e) {
-                // If token is invalid, clear the session
-                Session::forget('firebase_token');
-                Session::forget('firebase_user');
+            // Only redirect if on an auth route
+            if (in_array($request->path(), $this->guestRoutes)) {
+                return redirect()->route('dashboard');
             }
         }
 
