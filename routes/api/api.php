@@ -22,4 +22,5 @@ Route::middleware(['web', VerifyFirebaseToken::class])->group(function () {
     Route::get('/api/stores/sync-data', [SyncDataController::class, 'getStoreSyncData']);
     Route::post('/api/verify-store-token', [StoreController::class, 'verifyToken']);
     Route::delete('/api/stores/{domain}', [StoreController::class, 'disconnect']);
+    Route::post('/api/sync', [SyncDataController::class, 'runSync']);
 });

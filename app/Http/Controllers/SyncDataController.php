@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Store;
 use App\Models\SyncData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
 
 class SyncDataController extends Controller
@@ -43,6 +44,33 @@ class SyncDataController extends Controller
             return response()->json($result);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to fetch sync data'], 500);
+        }
+    }
+
+    public static function runSync(Request $request)
+    {
+        $storeId = $request->input('store_id');
+        $store = Store::find($storeId);
+        $syncData = SyncData::where('store_id', $storeId)->get();
+
+        try {
+            $gatewayUrl = env('GATEWAY_URL');
+            
+            $response = Http::post($gatewayUrl . '/ping', [
+                'store_id' => $storeId,
+                'store' => $store,
+                'sync_data' => $syncData
+            ]);
+
+            if (!$response->successful()) {
+                throw new \Exception('Failed to trigger sync: ' . $response->body());
+            }
+
+            return $response->json();
+            
+        } catch (\Exception $e) {
+            \Log::error('Sync error: ' . $e->getMessage());
+            throw $e;
         }
     }
 } 

@@ -1,24 +1,13 @@
-import { Store } from '@/types/models'
+import { Store, SyncData } from '@/types/models'
 import { usePage } from '@inertiajs/react'
 import { Deferred } from '@inertiajs/react'
 import { Page, Layout, Text, Card, Grid, BlockStack, InlineStack, Badge, SkeletonDisplayText, SkeletonBodyText, Button, Icon } from '@shopify/polaris'
 import { RefreshIcon } from '@shopify/polaris-icons'
+import axios from 'axios'
+import { useState } from 'react'
 
 export default function Dashboard() {
-    const { stores = [] as Store[] } = usePage().props
-
-    const cards: any[] = stores.map((store: Store) => {
-        return {
-            ...store,
-            products: 180,
-            articles: 100,
-            synced_products: 180,
-            synced_articles: 100,
-            sync_status: 'synced',
-            last_synced_at: '2024-01-01',
-            last_sync_error: 'No error',
-        }
-    })
+    const { syncData = [] as { store: Store, sync_data: SyncData }[] } = usePage().props
 
     const LoadingSkeleton = () => (
         <Grid>
@@ -63,59 +52,16 @@ export default function Dashboard() {
         <Page>
             <Layout>
                 <Layout.Section>
-                    <Deferred data="sync_data" fallback={<LoadingSkeleton />}>
+                    <Deferred data="syncData" fallback={<LoadingSkeleton />}>
                         <Grid>
-                            {cards.map((card, index) => (
+                            {(syncData?.original ?? []).map((data: {store: Store, sync_data: SyncData}, index: number) => (
                                 <Grid.Cell columnSpan={{
                                     xs: 6,
                                     sm: 3,
                                     md: 3,
                                     lg: 5,
                                 }} key={index}>
-                                    <Card>
-                                        <BlockStack gap={'400'}>
-                                            <InlineStack align="space-between" gap="200" wrap={false}>
-                                                <div style={{ minWidth: 0, flex: 1 }}>
-                                                    <Text as="h2" variant="headingMd" truncate>{card.name}</Text>
-                                                </div>
-                                                <Badge tone="success">
-                                                    {card.sync_status}
-                                                </Badge>
-                                            </InlineStack>
-
-                                            <BlockStack gap={'200'}>
-                                                <InlineStack align="space-between">
-                                                    <Text as="span" variant="bodyMd">Products</Text>
-                                                    <Text as="span" variant="bodyMd">{card.synced_products}/{card.products}</Text>
-                                                </InlineStack>
-                                                <InlineStack align="space-between">
-                                                    <Text as="span" variant="bodyMd">Articles</Text>
-                                                    <Text as="span" variant="bodyMd">{card.synced_articles}/{card.articles}</Text>
-                                                </InlineStack>
-                                            </BlockStack>
-
-                                            <InlineStack align="space-between" gap="200" wrap={false}>
-                                                <BlockStack gap={'100'}>
-                                                    <Text as="span" variant="bodySm" tone="subdued">
-                                                        Last synced: {card.last_synced_at}
-                                                    </Text>
-                                                    {card.last_sync_error !== 'No error' && (
-                                                        <Text as="span" variant="bodySm" tone="critical">
-                                                            Error: {card.last_sync_error}
-                                                        </Text>
-                                                    )}
-                                                </BlockStack>
-                                                <Button
-                                                    icon={
-                                                        <Icon
-                                                            source={RefreshIcon}
-                                                            tone="base"
-                                                        />}
-                                                    variant="primary"
-                                                    disabled={card.synced_products === card.products && card.synced_articles === card.articles}>Sync</Button>
-                                            </InlineStack>
-                                        </BlockStack>
-                                    </Card>
+                                    <StoreCard store={data.store} sync_data={data.sync_data} />
                                 </Grid.Cell>
                             ))}
                         </Grid>
@@ -124,4 +70,82 @@ export default function Dashboard() {
             </Layout>
         </Page>
     )
-} 
+}
+
+function StoreCard({ store, sync_data }: { store: Store, sync_data: SyncData }) {
+
+    const [syncing, setSyncing] = useState(false)
+
+    const products: number = 181
+    const articles: number = 101
+    const synced_products: number = 180
+    const synced_articles: number = 100
+    const sync_status: string = 'synced'
+    const last_synced_at: string = '2024-01-01'
+    const last_sync_error: string = 'No error'
+
+    const runSync = async () => {
+        if (syncing) return
+        setSyncing(true)
+        try {
+            const response = await axios.post('/api/sync', { store_id: store._id })
+            console.log(response)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setSyncing(false)
+        }
+    }
+
+    return (
+        <Card>
+            <BlockStack gap={'400'}>
+                <InlineStack align="space-between" gap="200" wrap={false}>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                        <Text as="h2" variant="headingMd" truncate>{store.name}</Text>
+                    </div>
+                    <Badge tone="success">
+                        {sync_status}
+                    </Badge>
+                </InlineStack>
+
+                <BlockStack gap={'200'}>
+                    <InlineStack align="space-between">
+                        <Text as="span" variant="bodyMd">Products</Text>
+                        <Text as="span" variant="bodyMd">{synced_products}/{products}</Text>
+                    </InlineStack>
+                    <InlineStack align="space-between">
+                        <Text as="span" variant="bodyMd">Articles</Text>
+                        <Text as="span" variant="bodyMd">{synced_articles}/{articles}</Text>
+                    </InlineStack>
+                </BlockStack>
+
+                <InlineStack align="space-between" gap="200" wrap={false}>
+                    <BlockStack gap={'100'}>
+                        <Text as="span" variant="bodySm" tone="subdued">
+                            Last synced: {last_synced_at}
+                        </Text>
+                        {last_sync_error !== 'No error' && (
+                            <Text as="span" variant="bodySm" tone="critical">
+                                Error: {last_sync_error}
+                            </Text>
+                        )}
+                    </BlockStack>
+                    <Button
+                        icon={
+                            <Icon
+                                source={RefreshIcon}
+                                tone="base"
+                            />}
+                        variant="primary"
+                        disabled={synced_products === products && synced_articles === articles}
+                        loading={syncing}
+                        onClick={runSync}
+                    >
+                        Sync
+                    </Button>
+                </InlineStack>
+            </BlockStack>
+        </Card>
+    )
+}

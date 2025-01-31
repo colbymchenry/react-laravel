@@ -6,7 +6,6 @@ use App\Http\Middleware\VerifyFirebaseToken;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Kreait\Laravel\Firebase\Facades\Firebase;
-use App\Http\Controllers\StoreController;
 use App\Http\Middleware\ShareAuthData;
 use App\Http\Controllers\SyncDataController;
 use App\Models\SyncData;

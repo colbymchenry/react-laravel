@@ -20,8 +20,9 @@ require __DIR__ . '/admin.php';
 // Protected routes
 Route::middleware(['web', VerifyFirebaseToken::class, ShareAuthData::class])->group(function () {
     Route::get('/dashboard', function () {
+        $syncDataController = new SyncDataController();
         return Inertia::render('dashboard/Dashboard', [
-            'sync_data' => Inertia::defer(fn () => SyncData::all()),
+            'syncData' => Inertia::defer(fn () => $syncDataController->getStoreSyncData()),
         ]);
     })->name('dashboard');
 
@@ -43,4 +44,5 @@ Route::middleware(['web', VerifyFirebaseToken::class, ShareAuthData::class])->gr
         Session::put('firebase_token', $token);
         return response()->json(['message' => 'Token refreshed']);
     });
+
 });
