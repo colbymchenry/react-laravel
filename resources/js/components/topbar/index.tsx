@@ -73,7 +73,7 @@ export function AppTopbar() {
     <TopBar
       showNavigationToggle
       userMenu={userMenuMarkup}
-      searchField={searchFieldMarkup}
+      searchField={window.location.pathname !== '/setup-openai' ? searchFieldMarkup : undefined}
     />
   );
 

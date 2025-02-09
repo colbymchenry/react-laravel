@@ -28,7 +28,7 @@ class GenerateTypeScriptTypes extends Command
             }
 
             // Always include id, created_at, and updated_at for MongoDB
-            $properties[] = "    _id: string;";
+            $properties[] = "    id: string;";
             $properties[] = "    created_at: string;";
             $properties[] = "    updated_at: string;";
 

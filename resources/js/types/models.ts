@@ -1,10 +1,55 @@
 // This file is auto-generated. Do not edit manually.
 
+export interface ApiKey {
+    api_key: string;
+    type: string;
+    user_id: string;
+    name: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
+    id: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ArticleEmbedding {
+    store_id: string;
+    shopify_id: string;
+    embedding: any[];
+    title: string;
+    content: string;
+    url: string;
+    imageUrl: string;
+    publishedAt: string;
+    error: string;
+    skipped: string;
+    id: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ProductEmbedding {
+    store_id: string;
+    shopify_id: string;
+    embedding: any[];
+    title: string;
+    description: string;
+    price: string;
+    url: string;
+    imageUrl: string;
+    error: string;
+    skipped: string;
+    id: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface RemoteConfig {
     openai_api_key: string;
     openai_embedding_model: string;
     openai_model: string;
-    _id: string;
+    id: string;
     created_at: string;
     updated_at: string;
 }
@@ -17,19 +62,9 @@ export interface Store {
     email: string;
     domain: string;
     shop_owner: string;
-    _id: string;
-    created_at: string;
-    updated_at: string;
-}
-
-export interface SyncData {
-    store_id: string;
-    type: string;
-    shopify_id: string;
-    synced_at: string;
-    sync_status: string;
-    sync_error: string;
-    _id: string;
+    syncing: string;
+    error: string;
+    id: string;
     created_at: string;
     updated_at: string;
 }
@@ -37,7 +72,7 @@ export interface SyncData {
 export interface User {
     uid: string;
     admin: string;
-    _id: string;
+    id: string;
     created_at: string;
     updated_at: string;
 }

@@ -8,7 +8,7 @@ class Store extends Model
 {
     protected $connection = 'mongodb';
     protected $collection = 'stores';
-    
+
     protected $fillable = [
         'user_uid',
         'store_url',
@@ -16,11 +16,13 @@ class Store extends Model
         'name',
         'email',
         'domain',
-        'shop_owner'
+        'shop_owner',
+        'syncing',
+        'error'
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
-} 
+}

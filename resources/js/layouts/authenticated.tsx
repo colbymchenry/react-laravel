@@ -12,7 +12,12 @@ export function AuthLayout({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <Frame sidebar={true} navigation={<AppSidebar />} topBar={<AppTopbar />} logo={logo} >
+        <Frame 
+            sidebar={window.location.pathname !== '/setup-openai'} 
+            navigation={window.location.pathname !== '/setup-openai' ? <AppSidebar /> : null} 
+            topBar={<AppTopbar />} 
+            logo={logo}
+        >
             {children}
         </Frame>
     );

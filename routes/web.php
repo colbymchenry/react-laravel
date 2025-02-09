@@ -1,63 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\RedirectAuthenticatedUsers;
-use App\Http\Middleware\VerifyFirebaseToken;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Http\Request;
-use Kreait\Laravel\Firebase\Facades\Firebase;
-use App\Http\Middleware\ShareAuthData;
-use App\Http\Controllers\SyncDataController;
-use App\Models\SyncData;
-use Inertia\Inertia;
-use App\Models\User;
-use App\Http\Middleware\AdminMiddleware;
-use App\Models\RemoteConfig;
-
-require __DIR__ . '/api/api.php';
-require __DIR__ . '/protected/protected.php';
-
-// Public routes with redirect for authenticated users
-Route::middleware(['web', RedirectAuthenticatedUsers::class])->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('login');
-    });
-
-    Route::get('/login', function (Request $request) {
-        return inertia('Login');
-    })->name('login');
-
-    Route::post('/auth/callback', function (Request $request) {
-        try {
-            $token = $request->input('token');
-            $auth = Firebase::auth();
-            $verifiedIdToken = $auth->verifyIdToken($token);
-            
-            $uid = $verifiedIdToken->claims()->get('sub');
-            $email = $verifiedIdToken->claims()->get('email');
-            
-            Session::put('firebase_user', [
-                'uid' => $uid,
-                'email' => $email
-            ]);
-            Session::put('firebase_token', $token);
-
-            User::updateOrCreate(
-                ['uid' => $uid], // Find by uid
-                [
-                    'uid' => $uid,
-                    'admin' => true
-                ]
-            );
-            
-            return response()->json(['message' => 'Token refreshed']);
-        } catch (\Exception $e) {
-            return redirect()->route('login')->with('error', 'Invalid token');
-        }
-    });
-
-    // Add this route for handling email links
-    Route::get('/auth/email-link', function (Request $request) {
-        return inertia('EmailLinkHandler');
-    })->name('email-link-handler');
-});
+require __DIR__ . '/page-routes/guest-routes.php';
+require __DIR__ . '/page-routes/auth-routes.php';
+require __DIR__ . '/page-routes/dashboard-routes.php';
+require __DIR__ . '/page-routes/admin-routes.php';
+require __DIR__ . '/api-routes/api-routes.php';
+require __DIR__ . '/api-routes/admin-api-routes.php';

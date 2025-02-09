@@ -1,6 +1,6 @@
 import { usePage } from "@inertiajs/react";
 import { Icon, Navigation } from "@shopify/polaris";
-import { HomeIcon, StoreIcon } from "@shopify/polaris-icons";
+import { HomeIcon, KeyIcon, StoreIcon } from "@shopify/polaris-icons";
 import {
     PersonLockFilledIcon
 } from '@shopify/polaris-icons';
@@ -20,6 +20,12 @@ export function AppSidebar() {
             icon: StoreIcon,
             url: '/dashboard/stores',
             selected: window.location.pathname === '/dashboard/stores',
+        },
+        {
+            label: 'API Keys',
+            icon: KeyIcon,
+            url: '/dashboard/apikeys',
+            selected: window.location.pathname === '/dashboard/apikeys',
         },
     ]
 
